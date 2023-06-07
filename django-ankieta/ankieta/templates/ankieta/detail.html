@@ -1,0 +1,33 @@
+<form action="{% url 'ankieta:vote' question.id %}" method="post">
+    {% comment %} Cross Site Request Forgeries(falsyfikaty) {% endcomment %}
+    {% csrf_token %} 
+    <fieldset>
+        <legend><h2>{{ question.question_text }}</h2></legend>
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        {% for choice in question.choice_set.all %}
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+        {% endfor %}
+    </fieldset>
+    <input type="submit" value="Vote">
+    </form>
+<p>This is detail.html</p>
+{% comment %} 
+<form action="{% url 'ankieta:vote' question.id %}" method="post">
+
+To tworzy znacznik HTML <form>, który określa, gdzie i jak dane z formularza mają być wysłane. Atrybut action używa tagu url, aby wygenerować ścieżkę URL do widoku o nazwie 'ankieta:vote', który przyjmuje argument question.id. Atrybut method określa, że dane mają być wysłane metodą HTTP POST¹.
+
+{% csrf_token %}
+
+To jest tag csrf_token, który służy do ochrony przed fałszywymi żądaniami między witrynami (CSRF). Dodaje ukryte pole z losowym tokenem, który jest sprawdzany przez Django przy odbieraniu danych z formularza¹.
+
+<fieldset>
+<legend><h1>{{ question.question_text }}</h1></legend>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% for choice in question.choice_set.all %}
+<input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+<label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+{% endfor %}
+</fieldset>
+
+To jest część HTML, która tworzy pola wyboru dla każdej odpowiedzi na pytanie. Używa tagów if i for, aby warunkowo wyświetlić komunikat o błędzie i iterować po wszystkich dostępnych opcjach². Używa także zmiennych szablonu, takich jak question.question_text, error_message, choice.id i choice.choice_text, aby wstawić dynamiczne wartości z kontekstu szablonu². Używa także zmiennej forloop.counter, która zwraca bieżący numer iteracji pętli². {% endcomment %}
